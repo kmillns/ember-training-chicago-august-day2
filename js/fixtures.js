@@ -140,10 +140,22 @@ App.SONG_FIXTURES = [{
   album: "4"
 }];
 
-App.ALBUM_FIXTURES.forEach(function(album) {
+App.ALBUM_FIXTURES = App.ALBUM_FIXTURES.map(function (album) {
+  return App.Album.create(album);
+});
+
+App.SONG_FIXTURES = App.SONG_FIXTURES.map(function (song) {
+  return App.Song.create(song);
+});
+
+
+App.ALBUM_FIXTURES.forEach(function (album) {
   album.songs = album.songs.map(function(id) {
     var song = App.SONG_FIXTURES.findProperty('id', id);
     song.album = App.ALBUM_FIXTURES.findProperty('id', song.album);
     return song;
   });
 });
+
+
+

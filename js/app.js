@@ -21,6 +21,18 @@
 		}
 	});
 
+	window.App.Album = Ember.Object.extend({
+		totalDuration: function () {
+			return this.songs.reduce(function (totalDuration, song) {
+				return totalDuration + song.duration;
+			}, 0);
+		}.property('songs.@each.duration')
+	});
+
+	window.App.Song = Ember.Object.extend({
+		
+	});
+
 	Ember.Handlebars.helper('format-duration', function(value, options) {
 		var seconds = parseInt(value, 10);
 		var minutes = Math.floor(seconds/60);
