@@ -1,37 +1,82 @@
+// app.js
 (function() {
-	"use strict";
+	'use strict';
 
 	window.App = Ember.Application.create();
+})();
 
-	window.App.Router.map(function () {
+// router.js
+(function (App) {
+	'use strict';
+
+	App.Router.map(function () {
 		this.resource('album', {
 			path: '/album/:album_id'
 		});
 	});
+})(window.App);
 
-	window.App.IndexRoute = Ember.Route.extend({
+// routes/Index.js
+(function (App) {
+	'use strict';
+
+	App.IndexRoute = Ember.Route.extend({
 		model: function () {
 			return App.ALBUM_FIXTURES;
 		}
 	});
+})(window.App);
 
-	window.App.AlbumRoute = Ember.Route.extend({
+// routes/Album.js
+(function (App) {
+	'use strict';
+
+	App.AlbumRoute = Ember.Route.extend({
 		model: function (params) {
 			return App.ALBUM_FIXTURES.findProperty('id', params.album_id);
+		},
+		events: {
+			play: function (song) {
+				this.controllerFor('nowPlaying').set('model', song);
+			}
 		}
 	});
+})(window.App);
 
-	window.App.Album = Ember.Object.extend({
+// models/Album.js
+(function (App) {
+	'use strict';
+
+	App.Album = Ember.Object.extend({
 		totalDuration: function () {
 			return this.songs.reduce(function (totalDuration, song) {
 				return totalDuration + song.duration;
 			}, 0);
 		}.property('songs.@each.duration')
 	});
+})(window.App);
 
-	window.App.Song = Ember.Object.extend({
+// models/Song.js
+(function (App) {
+	'use strict';
+
+	App.Song = Ember.Object.extend({
 		
 	});
+})(window.App);
+
+// controllers/NowPlaying.js
+(function (App) {
+	'use strict';
+
+	App.NowPlayingController = Ember.ObjectController.extend({
+
+	});
+})(window.App);
+
+// helpers/format-duration.js
+(function () {
+	'use strict';
 
 	Ember.Handlebars.helper('format-duration', function(value, options) {
 		var seconds = parseInt(value, 10);
@@ -50,3 +95,9 @@
 		return prettyTime;
 	});
 })();
+
+(function (App) {
+	App.AudioPlayerComponent = Ember.Component.extend({
+		classNames: ['audio-control']
+	});
+})(window.App);
